@@ -1,90 +1,79 @@
 <?php
-require_once 'apps/controllers/HomeController.php';
-require_once 'apps/controllers/CategoriesController.php';
-require_once 'apps/controllers/AuthController.php';
-require_once 'apps/controllers/AboutController.php';
+    require_once 'config.php';
+    require_once './libs/router.php';
+    require_once 'apps/api/controllers/ApiCategoriesController.php';
 
-define('BASE_URL', '//' . $_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'] . dirname($_SERVER['PHP_SELF']) . '/');
 
-$action = 'home'; // accion por defecto
-if (!empty($_GET['action'])) {
-    $action = $_GET['action'];
-}
 
-$params = explode('/', $action);
+    //resourse= parametro + verbo;
+    //Creo el router;
+    $router = new Router();
 
-switch ($params[0]) {
+    //Defino mi tabla de ruteo;
 
-    case 'home': //Muestra el Home
-        $controller = new HomeController();
-        $controller->showHome();
-        break;
-    case 'categorias': //Muestra lista de categorias
-        $controller = new CategoriesController();
-        $controller->showCategories();
-        break;
-    case 'ropaByCategoria': //Muestra lista de ropas
-        $controller = new CategorieController();
-        $controller->showClothesByCategorieId($params[1]);
-        break;
-    case 'eliminarRopa':
-        $controller = new CategorieController();
-        $controller->removeClothes($params[1], $params[2]);
-        break;
-    case 'agregarRopa':
-        $controller = new CategorieController();
-        $controller->addClothes($params[1]);
-        break;
-    case 'actualizarRopa ':
-        $controller = new CategorieController();
-        $controller->updateClothes($params[1]);
-        break;
-    case 'editarRopa':
-        $controller = new CategorieController();
-        $controller->editClothes($params[1]);
-        break;
-    case 'eliminarCategoria':
-        $controller = new CategoriesController();
-        $controller->removeCategorie($params[1]);
-        break;
-    case 'agregarCategoria':
-        $controller = new CategoriesController();
-        $controller->addCategorie();
-        break;
-    case 'actualizarCategoria':
-        $controller = new CategoriesController();
-        $controller->updateCategorie($params[1]);
-        break;
-    case 'editCategoria':
-        $controller = new CategoriesController();
-        $controller->editCategorie($params[1]);
-        break;
-    case 'login':
-        $controller = new AuthController();
-        $controller->showLogin();
-        break;
-    case 'singup': 
-        $controller = new AuthController();
-        $controller->showSingup();
-        break;
-    case 'registro': 
-        $controller = new AuthController();
-        $controller->upUser();
-        break;
-    case 'about': 
-        $controller = new AboutController();
-        $controller->showAbout();
-        break;
-    case 'auth': 
-        $controller = new AuthController();
-        $controller->auth();
-        break;
-    case 'logOut': 
-        $controller = new AuthController();
-        $controller->logOut();
-        break;
-    default:
-        $controller = new ErrorController();
-        $controller->showError404($error);
-        break;
-}
+    //Endpoints
+    //endponit para traer mi listado de categorias
+    //                 endpoint     verbo       desde donde llamo   motodo
+    //Listo mis categorias
+    $router->addRoute('categories',         'GET',    'ApiCategoriesController', 'get'   );
+
+    //Listo mis libros por categoria
+    $router->addRoute('categories/:ID',     'GET',    'ApiCategoriesController', 'get'   ); //PARAMETRO
+
+    //Elimino libro
+    //$router->addRoute('categorias/:ID/:ID',     'DELETE',    'CategorieController', 'removeBook'   ); //PARAMETRO
+
+    //Agrego libro //post para agregar
+    //$router->addRoute('categorias/:ID/:ID', 'POST', 'CategorieController', 'addBook');
+
+    //Actualizo libro //PUTpara actualizar
+    //$router->addRoute('categorias/:ID/:ID',     'PUT',    'CategorieController', 'addBook'   ); // parametro
+
+    //Edito libro //PUT para editar
+    //$router->addRoute('categorias/:ID/:ID',     'PUT',    'CategorieController', 'editBook'   ); //PARAMETRO
+
+    //Elimino categoria
+    $router->addRoute('categories/:ID',     'DELETE',    'ApiCategoriesController', 'delete'   ); //PARAMETRO
+
+    // Agregar categoría - POST envio datos a la API para su procesamiento
+    $router->addRoute('categories', 'POST', 'ApiCategoriesController', 'create');
+
+    // Actualizar categoría - PUT actualizo datos existentes
+    $router->addRoute('categories/:ID', 'PUT', 'ApiCategoriesController', 'updateCategoria'); 
+
+
+    //Edito categoria
+    //$router->addRoute('categorias/:ID',     'PUT',    'CategorieController', 'editCategorie'   ); //PARAMETRO
+
+    // Login
+    //$router->addRoute('login', 'GET', 'AuthController', 'showLogin');
+    // Ruta GET para mostrar la página de inicio de sesión.
+
+    // Signup
+    //$router->addRoute('signup', 'GET', 'AuthController', 'showSignup');
+    // Ruta GET para mostrar la página de registro de usuarios.
+
+
+    //Registrar usuario
+    //$router->addRoute('registro', 'POST', 'AuthController', 'registerUser');
+    //Con el post estoy mandando un usuario a mi db
+
+
+    //About
+    //$router->addRoute('about', 'GET', 'AuthController', 'showAbout'); //preguntar
+
+    //Auth
+    //$router->addRoute('auth',     'PUT',    'AuthController', 'auth'   ); 
+
+    //Log out
+    //$router->addRoute('logOut', 'GET', 'AuthController', 'logOut');
+
+    //Default
+    //$router->addRoute('default',     'PUT',    'ErrorController', 'showError404'   ); 
+
+
+
+    //Una vez q defini todas mis entradas en mi tabla de ruteo: route->paso mi recurso(resource, seria como el action) y obtengo el metodo con el q se esta llamando
+            //recurso/action    +    metodo con el q llamo/get/post/delete
+    $router->route($_GET['resource'], $_SERVER['REQUEST_METHOD']);
+
