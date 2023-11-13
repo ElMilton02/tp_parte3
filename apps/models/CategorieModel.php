@@ -5,7 +5,33 @@ require_once './apps/models/model.php';
 
 class CategoriesModel extends Model
 {
+    
+    public function getCategoriesOrdered($order) {
+        $query = $this->db->prepare("SELECT * FROM categorias ORDER BY id_categoria $order");
+        $query->execute();
+        
+        return $query->fetchAll(PDO::FETCH_OBJ);
+    }
+    
+    public function getCategoriesFilter($filtro){
+        $query = $this->db->prepare("SELECT * FROM categorias WHERE categoria LIKE '$filtro%'");
+        $query->execute();
+        
+        return $query->fetchAll(PDO::FETCH_OBJ);
+        
+    }
+    
+    public function getCategoriesPaginated($page, $perPage) {
+        $offset = ($page - 1) * $perPage;
 
+        $query = $this->db->prepare("SELECT * FROM categorias LIMIT :perPage OFFSET :offset"); //Se prepara una consulta SQL que selecciona todas las columnas de la tabla categorias limitando el resultado a la cantidad de elementos por página (:perPage) y desplazándose hasta la posición correcta (:offset).
+        $query->bindValue(':perPage', $perPage, PDO::PARAM_INT);
+        $query->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $query->execute();
+
+        return $query->fetchAll(PDO::FETCH_OBJ);
+    }
+    
     function getCategories()
     {
 

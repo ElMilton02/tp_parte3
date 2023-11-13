@@ -10,7 +10,7 @@ class ClothesModel extends Model
     function getClothesByCategorie($href)
     {
 
-        $query = $this->db->prepare('SELECT * FROM ropas WHERE id_categoria = ?');
+        $query = $this->db->prepare('SELECT * FROM libros WHERE id_categoria = ?');
         $query->execute([$href]);
 
         // $categorias es un arreglo de categorias
@@ -19,26 +19,35 @@ class ClothesModel extends Model
         return $categorie2;
     }
 
+    public function getClothesOrderedByIdCategories($id, $order) {
+
+        $query = $this->db->prepare("SELECT * FROM libros WHERE id_categoria = ? ORDER BY id_libro $order");
+        $query->execute([$id]);
+
+        return $query->fetchAll(PDO::FETCH_OBJ);
+    }
+    
+    
     function deleteClothes($idClothes)
     {
 
-        $query = $this->db->prepare('DELETE FROM ropas WHERE id_ropa = ?');
+        $query = $this->db->prepare('DELETE FROM libros WHERE id_libro = ?');
         $query->execute([$idClothes]);
     }
 
-    function insertClothes($id_Categorie, $nombre_ropa, $precio_ropa)
+    function insertClothes($id_Categorie, $titulo_libro, $autor_libro)
     {
         // Obtener la conexión y asignarla a $this->db
-        $query = $this->db->prepare('INSERT INTO ropas (id_categoria, nombre_ropa, precio_ropa) VALUES (?, ?, ?, ?)');
+        $query = $this->db->prepare('INSERT INTO libros (id_categoria, titulo_libro, autor_libro, anio) VALUES (?, ?, ?)');
 
-        $query->execute([$id_Categorie, $nombre_ropa, $precio_ropa]);
+        $query->execute([$id_Categorie, $titulo_libro, $autor_libro]);
         return $this->db->lastInsertId();
     }
 
-    public function modifyClothes($idClothes, $newName, $newPrice)
+    public function modifyBook($idBook, $newTitle, $newAuthor, $newYear)
     {
 
-        $query = $this->db->prepare('UPDATE ropas SET nombre_ropa = ?, precio_ropa = ? WHERE id_ropa = ?');
-        $query->execute([$newName, $newPrice, $idClothes]);
+        $query = $this->db->prepare('UPDATE libros SET titulo_libro = ?, autor_libro = ?, anio = ? WHERE id_libro = ?');
+        $query->execute([$newTitle, $newAuthor, $newYear, $idBook]);
     }
 }
