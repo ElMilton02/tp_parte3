@@ -76,4 +76,4 @@ Método: GET
 
 URL: /api/categorie/:page
 
-Ejemplo de uso: GET /tpe-web2/api/categorie/page(Numero de la pagina, 1-2-3-...)
+Ejemplo de uso: GET /api/categorie/page(Numero de la pagina, 1-2-3-...)
