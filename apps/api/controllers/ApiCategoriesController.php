@@ -1,6 +1,6 @@
 <?php
 require_once './apps/api/controllers/ApiController.php';
-require_once './apps/models/model.php';
+require_once './apps/models/Model.php';
 require_once './apps/models/CategoriesModel.php';
 require_once './apps/models/ClothesModel.php';
 
@@ -93,7 +93,7 @@ class ApiCategoriesController extends ApiController{
             $Clothes = $ClothesModel->getClothesOrderedByIdCategories($id, $order);
     
             if ($Clothes !== false) {
-                $this->view->response(['msg' => 'Datos de las categorías obtenidos ordenadas con éxito', 'Categorias' => $book], 200);
+                $this->view->response(['msg' => 'Datos de las categorías obtenidos ordenadas con éxito', 'Categorias' => $Clothes], 200);
             } else {
                 $this->view->response(['msg' => 'Error al obtener las categorías'], 400);
             }

@@ -1,5 +1,5 @@
 <?php
-require_once 'apps/api/view/ApiView.php';
+require_once 'apps/api/views/ApiView.php';
 //creo clase abstracta para todos los servicios, para encapsular metodos comunes
 //esto se hizo para traducir a json lo que envia el usuario
 abstract class ApiController {

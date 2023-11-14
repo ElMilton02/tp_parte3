@@ -16,7 +16,7 @@
     //Listo mis categorias
     $router->addRoute('categories', 'GET', 'ApiCategoriesController', 'getCategories'   );
 
-    //Listo mis libros por categoria
+    //Listo mis prendas por categoria
     $router->addRoute('categories/:ID', 'GET', 'ApiCategoriesController', 'getCategories'   );
     
     //Ordenamiento de las categorias
