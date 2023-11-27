@@ -1,7 +1,7 @@
 <?php
 
 require_once './config.php';
-require_once './apps/models/Model.php';
+require_once './apps/models/model.php';
 
 class ClothesModel extends Model
 {
@@ -10,7 +10,7 @@ class ClothesModel extends Model
     function getClothesByCategorie($href)
     {
 
-        $query = $this->db->prepare('SELECT * FROM libros WHERE id_categoria = ?');
+        $query = $this->db->prepare('SELECT * FROM ropas WHERE id_categoria = ?');
         $query->execute([$href]);
 
         // $categorias es un arreglo de categorias
@@ -21,7 +21,7 @@ class ClothesModel extends Model
 
     public function getClothesOrderedByIdCategories($id, $order) {
 
-        $query = $this->db->prepare("SELECT * FROM libros WHERE id_categoria = ? ORDER BY id_libro $order");
+        $query = $this->db->prepare("SELECT * FROM ropas WHERE id_categoria = ? ORDER BY id_ropas $order");
         $query->execute([$id]);
 
         return $query->fetchAll(PDO::FETCH_OBJ);
@@ -31,23 +31,23 @@ class ClothesModel extends Model
     function deleteClothes($idClothes)
     {
 
-        $query = $this->db->prepare('DELETE FROM libros WHERE id_libro = ?');
+        $query = $this->db->prepare('DELETE FROM ropas WHERE id_ropas = ?');
         $query->execute([$idClothes]);
     }
 
-    function insertClothes($id_Categorie, $titulo_libro, $autor_libro)
+    function insertClothes($id_Categorie, $nombre_ropa, $precio_ropa)
     {
         // Obtener la conexión y asignarla a $this->db
-        $query = $this->db->prepare('INSERT INTO libros (id_categoria, titulo_libro, autor_libro, anio) VALUES (?, ?, ?)');
+        $query = $this->db->prepare('INSERT INTO ropas (id_categoria, nombre_ropa, precio_ropa) VALUES (?, ?, ?)');
 
-        $query->execute([$id_Categorie, $titulo_libro, $autor_libro]);
+        $query->execute([$id_Categorie, $nombre_ropa, $precio_ropa]);
         return $this->db->lastInsertId();
     }
 
-    public function modifyBook($idBook, $newTitle, $newAuthor, $newYear)
+    public function modifyClothes($idClothes, $newName, $newPrice)
     {
 
-        $query = $this->db->prepare('UPDATE libros SET titulo_libro = ?, autor_libro = ?, anio = ? WHERE id_libro = ?');
-        $query->execute([$newTitle, $newAuthor, $newYear, $idBook]);
+        $query = $this->db->prepare('UPDATE ropas SET nombre_ropa = ?, precio_ropa = ? WHERE id_ropas = ?');
+        $query->execute([$newName, $newPrice, $idClothes]);
     }
 }

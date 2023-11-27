@@ -1,6 +1,6 @@
 <?php
 require_once './apps/api/controllers/ApiController.php';
-require_once './apps/models/Model.php';
+require_once './apps/models/model.php';
 require_once './apps/models/CategoriesModel.php';
 require_once './apps/models/ClothesModel.php';
 

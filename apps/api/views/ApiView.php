@@ -1,3 +1,5 @@
+
+
 <?php 
 
 class ApiView
@@ -20,4 +22,10 @@ class ApiView
         );
         return (isset($status[$code])) ? $status[$code] : $status[500];
     }
+
+
+
+
+
+
 }
